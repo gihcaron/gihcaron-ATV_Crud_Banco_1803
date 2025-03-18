@@ -8,3 +8,7 @@ CREATE TABLE ingressos (
     quantidade_disponivel INTEGER NOT NULL
     );
 
+    
+
+
+
