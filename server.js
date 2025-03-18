@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const ingressoRoutes = require("./routes/ingressoRoutes");
+const ingressoRoutes = require("./src/routes/ingressoRoutes.js");
 
 app.use("/api", ingressoRoutes);
 
