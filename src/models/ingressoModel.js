@@ -1,6 +1,6 @@
 const pool = require("../config/database");
 
-const getIngressos = async () => {
+const getAllIngressos = async () => {
     const result = await pool.query("SELECT * FROM ingressos");
     return result.rows;
 };
@@ -10,12 +10,17 @@ const getIngressoById = async (id) => {
     return result.rows[0];
 };
 
-const createIngresso = async (evento, localizacao, data_evento, categoria, preco, quantiedade_disponivel) => {
-    const result = await pool.query(
-        "INSERT INTO ingressos (evento, localizacao, data_evento, categoria, preco, quantiedade_disponivel) VALUES ($1, $2) RETURNING *",
-        [evento, localizacao, data_evento, categoria, preco, quantiedade_disponivel]
-    );
-    return result.rows[0];
+const createIngresso = async (evento, localizacao, data_evento, categoria, preco, quantidade_disponivel) => {
+    try {
+        const result = await pool.query(
+            "INSERT INTO ingressos (evento, localizacao, data_evento, categoria, preco, quantidade_disponivel) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+            [evento, localizacao, data_evento, categoria, preco, quantidade_disponivel]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error("Erro ao criar ingresso:", error);
+        throw error;
+    }
 };
 
 const createVenda = async (id_venda, id, quantidade) => {
@@ -26,10 +31,10 @@ const createVenda = async (id_venda, id, quantidade) => {
     return result.rows[0];
 }
 
-const updateIngresso = async (id, evento, localizacao, data_evento, categoria, preco, quantiedade_disponivel) => {
+const updateIngresso = async (id, evento, localizacao, data_evento, categoria, preco, quantidade_disponivel) => {
     const result = await pool.query(
-        "UPDATE ingressos SET evento = $1, localizacao = $2, data_evento = $3, categoria = $4, preco = $5, quantiedade_disponivel = $6 WHERE id = $7 RETURNING *",
-        [evento, localizacao, data_evento, categoria, preco, quantiedade_disponivel, id]
+        "UPDATE ingressos SET evento = $1, localizacao = $2, data_evento = $3, categoria = $4, preco = $5, quantidade_disponivel = $6 WHERE id = $7 RETURNING *",
+        [evento, localizacao, data_evento, categoria, preco, quantidade_disponivel, id]
     );
     return result.rows[0];
 };
@@ -44,4 +49,4 @@ const deleteIngresso = async (id) => {
     return { message: "Ingresso deletado com sucesso." };
 };
 
-module.exports = { createVenda, getIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso };
+module.exports = { createVenda, getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso };

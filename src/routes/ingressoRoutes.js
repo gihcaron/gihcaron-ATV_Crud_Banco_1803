@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const ingressoController = require("../controllers/ingressoController");
 
-router.post("ingressos", ingressoController.getAllUsers);
-router.get("ingressos/:id", ingressoController.getUser);
-router.get("ingressos", ingressoController.createUser);
-router.put("ingressos/:id", ingressoController.updateUser);
-router.delete("ingressos/:id", ingressoController.deleteUser);
+router.post("/ingressos", ingressoController.createIngresso);
+router.get("/ingressos/:id", ingressoController.getIngressoById);
+router.get("/ingressos", ingressoController.getAllIngressos);
+router.put("/ingressos/:id", ingressoController.updateIngresso);
+router.delete("/ingressos/:id", ingressoController.deleteIngresso);
+router.post("/venda", ingressoController.createVenda);
 
 module.exports = router;

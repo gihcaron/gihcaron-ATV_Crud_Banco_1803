@@ -1,6 +1,6 @@
 const ingressoModel = require("../models/ingressoModel");
 
-const getAllingressos = async (req, res) => {
+const getAllIngressos = async (req, res) => {
     try {
         const ingressos = await ingressoModel.getIngressos();
         res.json(ingressos);
@@ -86,4 +86,4 @@ const createVenda = async (req, res) => {
         }    
 }
 
-module.exports = { getAllingressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso, createVenda };
+module.exports = { getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso, createVenda };
