@@ -33,35 +33,37 @@ const createIngresso = async (evento, localizacao, data_evento, categoria, preco
     }
 };
 
-const createVenda = async (id_venda, id, quantidade, evento) => {
-    const result = await pool.query("SELECT * FROM ingressos WHERE id = $1", [id]);  
-    let quantidade_disponivel = result.rows[0].quantidade_disponivel;
-    if (quantidade_disponivel < quantidade) {
-        return { error: "Quantidade indisponível." };
-    }
+// const createVenda = async (id_venda, id, quantidade, evento) => {
+//     const result = await pool.query("SELECT * FROM ingressos WHERE id = $1", [id]);  
+//     let quantidade_disponivel = result.rows[0].quantidade_disponivel;
+//     if (quantidade_disponivel < quantidade) {
+//         return { error: "Quantidade indisponível." };
+//     }
 
-    quantidade_disponivel -= quantidade;
-    const updatedIngresso = await pool.query(
-        "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
-        [quantidade_disponivel, id]
-    );
+//     quantidade_disponivel -= quantidade;
+//     const updatedIngresso = await pool.query(
+//         "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
+//         [quantidade_disponivel, id]
+//     );
 
-    return {message: "Venda realizada com sucesso.", id_venda, id, quantidade, evento};
-}
+//     return {message: "Venda realizada com sucesso.", id_venda, id, quantidade, evento};
+// }
 
-const updatedIngresso = await pool.query(
-    "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
-    [id, quantidade_disponivel] 
-);
+// const updatedIngresso = await pool.query(
+//     "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
+//     [id, quantidade_disponivel] 
+// );
 
-const deleteIngresso = async (id) => {
-    const result = await pool.query("DELETE FROM ingressos WHERE id = $1 RETURNING *", [id]);
+// const deleteIngresso = async (id) => {
+//     const result = await pool.query("DELETE FROM ingressos WHERE id = $1 RETURNING *", [id]);
 
-    if (result.rowCount === 0) {
-        return { error: "Ingresso não encontrado." };
-    }
+//     if (result.rowCount === 0) {
+//         return { error: "Ingresso não encontrado." };
+//     }
 
-    return { message: "Ingresso deletado com sucesso." };
-};
+//     return { message: "Ingresso deletado com sucesso." };
+// };
 
-module.exports = { createVenda, getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso };
+// module.exports = { createVenda, getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso };
+
+module.exports = { getAllIngressos, getIngressoById, createIngresso };

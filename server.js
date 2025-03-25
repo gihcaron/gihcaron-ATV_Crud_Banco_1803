@@ -13,7 +13,8 @@ app.get("/", (req, res) => {
     res.send("Eu amo muito backend! ❤️");
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
+
 app.listen(PORT, () => {
     console.log(` Servidor Rodando em http://localhost:${PORT}`);
 });
