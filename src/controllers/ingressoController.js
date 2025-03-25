@@ -2,7 +2,7 @@ const ingressoModel = require("../models/ingressoModel");
 
 const getAllIngressos = async (req, res) => {
     try {
-        const ingressos = await ingressoModel.getIngressos();
+        const ingressos = await ingressoModel.getAllIngressos();
         res.json(ingressos);
     } catch (error) {
         res.status(404).json({ message: "Erro ao buscar Ingressos." });
@@ -61,8 +61,8 @@ const deleteIngresso = async (req, res) => {
 const createVenda = async (req, res) => {
     try {
         const { id, quantidade } = req.body;
-        if (!id || !quantidade) {
-            return res.status(400).json({ message: "Todos os campos devem ser preenchidos." });
+        if (!id || !quantidade || quantidade <= 0) {
+            return res.status(400).json({ message: "Todos os campos devem ser preenchidos e a quantidade deve ser maior que zero." });
         }
 
         const ingresso = await ingressoModel.getIngressoById(id);
@@ -74,8 +74,8 @@ const createVenda = async (req, res) => {
             return res.status(400).json({ message: "Quantidade solicitada maior que a disponível. Não foi possível concluir sua compra." });
         }
         ingresso.quantidade_disponivel -= quantidade;
-        if ( ingresso.quantidade_diponível < 0){
-            ingresso.quantidade_diponível = 0;
+        if (ingresso.quantidade_disponivel < 0) {
+            ingresso.quantidade_disponivel = 0;
         }
         await ingressoModel.updateIngresso(ingresso.id, ingresso.evento, ingresso.localizacao, ingresso.data_evento, ingresso.categoria, ingresso.preco, ingresso.quantidade_disponivel);   
         const newVenda = await ingressoModel.createVenda(req.params.id, id, quantidade);  
