@@ -1,4 +1,6 @@
-CREATE DATABASE bilheteria;
+CREATE DATABASE ingressos;
+
+\c ingressos;
 
 CREATE TABLE ingressos (
     id SERIAL PRIMARY KEY,

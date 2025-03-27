@@ -33,37 +33,47 @@ const createIngresso = async (evento, localizacao, data_evento, categoria, preco
     }
 };
 
-// const createVenda = async (id_venda, id, quantidade, evento) => {
-//     const result = await pool.query("SELECT * FROM ingressos WHERE id = $1", [id]);  
-//     let quantidade_disponivel = result.rows[0].quantidade_disponivel;
-//     if (quantidade_disponivel < quantidade) {
-//         return { error: "Quantidade indisponível." };
-//     }
+const createVenda = async (id_venda, id, quantidade, evento) => {
+    const result = await pool.query("SELECT * FROM ingressos WHERE id = $1", [id]);  
+    let quantidade_disponivel = result.rows[0].quantidade_disponivel;
+    const categoria = result.rows[0].categoria;
 
-//     quantidade_disponivel -= quantidade;
-//     const updatedIngresso = await pool.query(
-//         "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
-//         [quantidade_disponivel, id]
-//     );
+    if (quantidade_disponivel < quantidade) {
+        return { error: "Quantidade indisponível." };
+    }
 
-//     return {message: "Venda realizada com sucesso.", id_venda, id, quantidade, evento};
-// }
+    quantidade_disponivel -= quantidade;
+    const updatedIngresso = await pool.query(
+        "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
+        [id, quantidade_disponivel]
+    );
 
-// const updatedIngresso = await pool.query(
-//     "UPDATE ingressos SET quantidade_disponivel = $2 WHERE id = $1 RETURNING *",
-//     [id, quantidade_disponivel] 
-// );
+    return {
+        mensagem: "Compra realizada com sucesso!",
+        evento,
+        categoria,
+        quantidade_comprada: quantidade,
+        quantidade_restante: quantidade_disponivel
+    };
+}
 
-// const deleteIngresso = async (id) => {
-//     const result = await pool.query("DELETE FROM ingressos WHERE id = $1 RETURNING *", [id]);
+const updateIngresso = async (id, evento, localizacao, data_evento, categoria, preco, quantidade_disponivel) => {
+    const result = await pool.query(
+        "UPDATE ingressos SET evento = $1, localizacao = $2, data_evento = $3, categoria = $4, preco = $5, quantidade_disponivel = $6 WHERE id = $7 RETURNING *",
+        [evento, localizacao, data_evento, categoria, preco, quantidade_disponivel, id]
+    );
+    return result.rows[0];
+}
+const deleteIngresso = async (id) => {
+    const result = await pool.query("DELETE FROM ingressos WHERE id = $1 RETURNING *", [id]);
 
-//     if (result.rowCount === 0) {
-//         return { error: "Ingresso não encontrado." };
-//     }
+    if (result.rowCount === 0) {
+        return { error: "Ingresso não encontrado." };
+    }
 
-//     return { message: "Ingresso deletado com sucesso." };
-// };
+    return { message: "Ingresso deletado com sucesso."  };
+};
 
 // module.exports = { createVenda, getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso };
 
-module.exports = { getAllIngressos, getIngressoById, createIngresso };
+module.exports = { getAllIngressos, getIngressoById, createIngresso, updateIngresso, createVenda, deleteIngresso};
